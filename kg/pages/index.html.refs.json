@@ -1,0 +1,29 @@
+[
+ {
+  "id": "mathemetica-distance-metrics",
+  "type": "graphic",
+  "title": "Distance metrics (인포그래픽)",
+  "author": [
+   {
+    "family": "mathemetica",
+    "given": ""
+   }
+  ],
+  "lab": {
+   "work": "lab:work/mathemetica-distance-metrics",
+   "role": "background",
+   "supports": [],
+   "locs": [],
+   "verified": {
+    "title": true,
+    "author": true,
+    "year": true,
+    "container": false,
+    "pages": false,
+    "doi": false
+   },
+   "checkedBy": "페이지 출처 칸과 README에서 옮김 (외부 대조 안 함)",
+   "checkedSource": "page"
+  }
+ }
+]

@@ -1,0 +1,536 @@
+{
+ "version": "1.0",
+ "page": "Distance-metrics-tutorial-part2",
+ "nodes": [
+  {
+   "id": "lab:concept/distance-metric",
+   "type": "Concept",
+   "label": {
+    "ko": "거리 척도",
+    "en": "Distance metric"
+   },
+   "anchor": "#stage",
+   "level": 1,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "mentioned",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "두 대상이 얼마나 다른지 재는 자. 2부는 같은 것인지 묻는 자를 다룬다."
+   },
+   "family": "geom"
+  },
+  {
+   "id": "lab:concept/hamming-distance",
+   "type": "Concept",
+   "label": {
+    "ko": "해밍 거리",
+    "en": "Hamming distance"
+   },
+   "anchor": "#stage",
+   "level": 1,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "같은 자리끼리 다른 점의 수. 박사 얼굴 도장 32×32 = 1,024점에서 시아 13점, 모아 67점."
+   },
+   "family": "math"
+  },
+  {
+   "id": "lab:concept/jaccard-index",
+   "type": "Concept",
+   "label": {
+    "ko": "자카드 지수",
+    "en": "Jaccard index"
+   },
+   "anchor": "#stage",
+   "level": 2,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "겹친 부분 ÷ 합친 부분. 피규어 블록 모형에서 모아 정품 0.996, 시아 해적판 0.705."
+   },
+   "family": "math"
+  },
+  {
+   "id": "lab:concept/sorensen-dice",
+   "type": "Concept",
+   "label": {
+    "ko": "쇠렌센-다이스 계수",
+    "en": "Sørensen–Dice coefficient"
+   },
+   "anchor": "#stage",
+   "level": 2,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "겹친 부분 × 2 ÷ 두 크기의 합. 모아 정품 0.998, 시아 해적판 0.827."
+   },
+   "family": "math"
+  },
+  {
+   "id": "lab:concept/set-overlap",
+   "type": "Concept",
+   "label": {
+    "ko": "집합 겹침",
+    "en": "Set overlap"
+   },
+   "anchor": "#stage",
+   "level": 1,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "두 블록 모형(24×24×24)을 블록 집합으로 보고 겹친 블록을 센다."
+   },
+   "family": "math"
+  },
+  {
+   "id": "lab:concept/hamming-threshold",
+   "type": "Method",
+   "label": {
+    "ko": "해밍 기준선 판정",
+    "en": "Hamming threshold rule"
+   },
+   "anchor": "#stage",
+   "level": 2,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "다른 점이 26점 이상이면 위작. 어려운 판에서 정확도 0.900."
+   },
+   "family": "classical"
+  },
+  {
+   "id": "lab:concept/threshold-failure",
+   "type": "Limitation",
+   "label": {
+    "ko": "점 개수만 세는 자의 한계",
+    "en": "Counting-only ruler fails"
+   },
+   "anchor": "#stage",
+   "level": 2,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "번짐·잉크 빠짐이 있는 진품(30점)은 위작으로, 1px 어긋난 위작(19점)은 진품으로 판정된다."
+   },
+   "family": "evaluation"
+  },
+  {
+   "id": "lab:method/logistic-regression",
+   "type": "Method",
+   "label": {
+    "ko": "로지스틱 회귀",
+    "en": "Logistic regression"
+   },
+   "anchor": "#stage",
+   "level": 2,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "'더 묻은 점'·'빠진 점' 지도 2,048개를 입력으로 위작 확률을 내는 모델(C = 0.5). 시험 200장 중 200장 정답."
+   },
+   "family": "classical"
+  },
+  {
+   "id": "lab:concept/learning-curve",
+   "type": "Concept",
+   "label": {
+    "ko": "학습 곡선",
+    "en": "Learning curve"
+   },
+   "anchor": "#stage",
+   "level": 2,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "학습 장 수 2·4·8·16·600에서 정확도 0.695·0.820·0.850·1.000·1.000."
+   },
+   "family": "evaluation"
+  },
+  {
+   "id": "lab:metric/accuracy",
+   "type": "Metric",
+   "label": {
+    "ko": "정확도",
+    "en": "Accuracy"
+   },
+   "anchor": "#stage",
+   "level": 1,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "시험 200장 중 맞힌 비율."
+   },
+   "family": "evaluation"
+  },
+  {
+   "id": "lab:dataset/stamp-prints",
+   "type": "Dataset",
+   "label": {
+    "ko": "도장 인영 800장",
+    "en": "800 stamp prints"
+   },
+   "anchor": "#stage",
+   "level": 1,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "진품 인쇄 400장(누르는 힘·번짐·잉크 빠짐)과 위작 400장(새김 1px 어긋남), 학습 600 · 시험 200."
+   }
+  },
+  {
+   "id": "lab:sim/stamp-compare",
+   "type": "Simulation",
+   "label": {
+    "ko": "도장 비교와 AI 모델 홀로그램",
+    "en": "Stamp comparison"
+   },
+   "anchor": "#stage",
+   "level": 1,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "쉬운 판·어려운 판 도장을 점 단위로 비교하고 모델의 위작 확률을 보여 주는 장면."
+   }
+  },
+  {
+   "id": "lab:sim/figurine-blocks",
+   "type": "Simulation",
+   "label": {
+    "ko": "피규어 블록 겹치기 (3D)",
+    "en": "Figurine block overlap in 3D"
+   },
+   "anchor": "#stage",
+   "level": 2,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "하루 2등신 미니 피규어 블록 모형(1,204블록)을 겹쳐 자카드·다이스를 잰다."
+   }
+  },
+  {
+   "id": "lab:work/mathemetica-distance-metrics",
+   "type": "Work",
+   "label": {
+    "ko": "Distance metrics (인포그래픽)",
+    "en": "Distance metrics (인포그래픽)"
+   },
+   "anchor": "#export",
+   "level": 2,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "mentioned",
+   "match": []
+  },
+  {
+   "id": "lab:question/ruler-vs-model",
+   "type": "Question",
+   "label": {
+    "ko": "자로 충분한가, 모델이 필요한가",
+    "en": "Ruler or model?"
+   },
+   "anchor": "#stage",
+   "level": 2,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "쉬운 판은 해밍만으로 충분하지만 어려운 판에서는 학습한 모델이 필요했다."
+   }
+  }
+ ],
+ "edges": [
+  {
+   "s": "lab:concept/distance-metric",
+   "p": "lab:broader",
+   "o": "lab:topic/metric-space",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/hamming-distance",
+   "p": "lab:broader",
+   "o": "lab:topic/metric-space",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/jaccard-index",
+   "p": "lab:broader",
+   "o": "lab:topic/sets",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/sorensen-dice",
+   "p": "lab:broader",
+   "o": "lab:topic/sets",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/set-overlap",
+   "p": "lab:broader",
+   "o": "lab:topic/sets",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/hamming-threshold",
+   "p": "lab:broader",
+   "o": "lab:topic/rule-vs-learning",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/threshold-failure",
+   "p": "lab:broader",
+   "o": "lab:topic/rule-vs-learning",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:method/logistic-regression",
+   "p": "lab:broader",
+   "o": "lab:topic/logistic-regression",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/learning-curve",
+   "p": "lab:broader",
+   "o": "lab:topic/generalization",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:metric/accuracy",
+   "p": "lab:broader",
+   "o": "lab:topic/accuracy-metrics",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/hamming-distance",
+   "p": "lab:instanceOf",
+   "o": "lab:concept/distance-metric",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/jaccard-index",
+   "p": "lab:contrastsWith",
+   "o": "lab:concept/sorensen-dice",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/set-overlap",
+   "p": "lab:prerequisiteOf",
+   "o": "lab:concept/jaccard-index",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/set-overlap",
+   "p": "lab:prerequisiteOf",
+   "o": "lab:concept/sorensen-dice",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/hamming-distance",
+   "p": "lab:prerequisiteOf",
+   "o": "lab:concept/hamming-threshold",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/hamming-threshold",
+   "p": "lab:hasLimitation",
+   "o": "lab:concept/threshold-failure",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/threshold-failure",
+   "p": "lab:addressedBy",
+   "o": "lab:method/logistic-regression",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:method/logistic-regression",
+   "p": "lab:contrastsWith",
+   "o": "lab:concept/hamming-threshold",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:method/logistic-regression",
+   "p": "lab:evaluatedBy",
+   "o": "lab:metric/accuracy",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/hamming-threshold",
+   "p": "lab:evaluatedBy",
+   "o": "lab:metric/accuracy",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:method/logistic-regression",
+   "p": "lab:evaluatedOn",
+   "o": "lab:dataset/stamp-prints",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/learning-curve",
+   "p": "lab:partOf",
+   "o": "lab:method/logistic-regression",
+   "anchor": "#stage",
+   "confidence": "medium"
+  },
+  {
+   "s": "lab:concept/hamming-distance",
+   "p": "lab:demonstratedBy",
+   "o": "lab:sim/stamp-compare",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:method/logistic-regression",
+   "p": "lab:demonstratedBy",
+   "o": "lab:sim/stamp-compare",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/jaccard-index",
+   "p": "lab:demonstratedBy",
+   "o": "lab:sim/figurine-blocks",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/sorensen-dice",
+   "p": "lab:demonstratedBy",
+   "o": "lab:sim/figurine-blocks",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/threshold-failure",
+   "p": "lab:raises",
+   "o": "lab:question/ruler-vs-model",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/distance-metric",
+   "p": "lab:relatedTo",
+   "o": "lab:work/mathemetica-distance-metrics",
+   "anchor": "#stage",
+   "confidence": "high"
+  }
+ ]
+}

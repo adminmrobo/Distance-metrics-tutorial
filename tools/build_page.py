@@ -58,3 +58,10 @@ for part, keys, out in ((1, ("position", "cosine", "globe"), "index.html"),
     os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
     open(out, "w", encoding="utf-8").write(s)
     print(out, len(s.encode()), "bytes")
+
+# 지식 색인(#kg)·꾸러미(#export)는 기본 — 페이지를 다시 만들면 kg/pages/의 꼬리표를 다시 붙인다(본문은 그대로).
+import subprocess, sys
+if os.path.exists("kg/reapply.py"):
+    subprocess.run([sys.executable, "kg/reapply.py", "."], check=True)
+else:
+    print("경고: kg/reapply.py가 없습니다 — 지식 색인을 붙이지 못했습니다 (ai-lab-retrofit으로 kg/pages/를 먼저 만드세요)")

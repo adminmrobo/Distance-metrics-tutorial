@@ -1,0 +1,624 @@
+{
+ "version": "1.0",
+ "page": "Distance-metrics-tutorial",
+ "nodes": [
+  {
+   "id": "lab:concept/distance-metric",
+   "type": "Concept",
+   "label": {
+    "ko": "거리 척도",
+    "en": "Distance metric"
+   },
+   "anchor": "#stage",
+   "level": 1,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "두 점(사람·글·도시)이 얼마나 먼지 재는 자. 자를 바꾸면 같은 두 사람의 거리가 달라진다."
+   },
+   "family": "geom"
+  },
+  {
+   "id": "lab:concept/euclidean-distance",
+   "type": "Concept",
+   "label": {
+    "ko": "유클리드 거리",
+    "en": "Euclidean distance"
+   },
+   "anchor": "#stage",
+   "level": 1,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "곧게 잰 거리. 시아 (4, 0, 10)와 모아 (12, 5, 7)는 √98 = 9.899."
+   },
+   "family": "geom"
+  },
+  {
+   "id": "lab:concept/manhattan-distance",
+   "type": "Concept",
+   "label": {
+    "ko": "맨해튼 거리",
+    "en": "Manhattan distance"
+   },
+   "anchor": "#stage",
+   "level": 1,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "축을 따라 꺾어 걷는 거리. 8 + 5 + 3 = 16."
+   },
+   "family": "geom"
+  },
+  {
+   "id": "lab:concept/chebyshev-distance",
+   "type": "Concept",
+   "label": {
+    "ko": "체비쇼프 거리",
+    "en": "Chebyshev distance"
+   },
+   "anchor": "#stage",
+   "level": 2,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "가장 많이 움직인 축 하나의 거리. 8."
+   },
+   "family": "geom"
+  },
+  {
+   "id": "lab:concept/minkowski-distance",
+   "type": "Concept",
+   "label": {
+    "ko": "민코프스키 거리",
+    "en": "Minkowski distance"
+   },
+   "anchor": "#stage",
+   "level": 2,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "p로 모양이 바뀌는 자. p = 1이면 맨해튼, 2면 유클리드, p를 키울수록 체비쇼프 8에 다가간다(p = 1.5·3·4·8: 11.501·8.724·8.324·8.023)."
+   },
+   "family": "math"
+  },
+  {
+   "id": "lab:concept/unit-ball",
+   "type": "Concept",
+   "label": {
+    "ko": "거리가 1인 면",
+    "en": "Unit ball of a norm"
+   },
+   "anchor": "#stage",
+   "level": 3,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "민코프스키 p마다 원점에서 거리 1인 점을 모은 면. p에 따라 마름모에서 구, 상자 모양으로 바뀐다."
+   },
+   "family": "math"
+  },
+  {
+   "id": "lab:concept/cosine-similarity",
+   "type": "Concept",
+   "label": {
+    "ko": "코사인 유사도",
+    "en": "Cosine similarity"
+   },
+   "anchor": "#stage",
+   "level": 2,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "두 벡터 사이 각도로 비슷함을 잰다. 후기 낱말 횟수 시아 (2, 1, 0)·모아 (6, 2, 0)는 0.990(8.1°), 끝과 끝 유클리드 거리는 4.123."
+   },
+   "family": "ml"
+  },
+  {
+   "id": "lab:concept/haversine-distance",
+   "type": "Concept",
+   "label": {
+    "ko": "하버사인 거리",
+    "en": "Haversine distance"
+   },
+   "anchor": "#stage",
+   "level": 2,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "둥근 지구 위의 최단 거리. 서울–런던 8,857 km (지구 속 직선 8,161 km)."
+   },
+   "family": "geom"
+  },
+  {
+   "id": "lab:concept/metric-inequality",
+   "type": "Concept",
+   "label": {
+    "ko": "체비쇼프 ≤ 유클리드 ≤ 맨해튼",
+    "en": "Chebyshev ≤ Euclidean ≤ Manhattan"
+   },
+   "anchor": "#stage",
+   "level": 2,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "같은 두 점이면 이 순서가 늘 성립한다(8 ≤ 9.899 ≤ 16)."
+   },
+   "family": "math"
+  },
+  {
+   "id": "lab:concept/review-clustering",
+   "type": "Concept",
+   "label": {
+    "ko": "비슷한 후기 묶기",
+    "en": "Grouping similar reviews"
+   },
+   "anchor": "#stage",
+   "level": 2,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "코사인으로 재면 후기 여섯 개가 표정(0.990)·도색(0.894)·배송(0.894) 세 묶음으로 모인다."
+   },
+   "family": "unsupervised"
+  },
+  {
+   "id": "lab:concept/word-count-vector",
+   "type": "Concept",
+   "label": {
+    "ko": "낱말 횟수 벡터",
+    "en": "Word-count vector"
+   },
+   "anchor": "#stage",
+   "level": 1,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "후기를 (표정, 도색, 배송) 낱말이 나온 횟수로 바꾼 벡터."
+   },
+   "family": "language"
+  },
+  {
+   "id": "lab:concept/curved-space",
+   "type": "Limitation",
+   "label": {
+    "ko": "둥근 땅에서는 곧은 자가 틀린다",
+    "en": "Straight rulers fail on a sphere"
+   },
+   "anchor": "#stage",
+   "level": 2,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "지구 위에서는 땅 속을 지나는 직선이 아니라 표면을 따라 재야 한다."
+   },
+   "family": "geom"
+  },
+  {
+   "id": "lab:sim/distance-3d",
+   "type": "Simulation",
+   "label": {
+    "ko": "좌표 방에서 자 바꿔 재기 (3D)",
+    "en": "Measuring in the 3D room"
+   },
+   "anchor": "#stage",
+   "level": 1,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "x·y·z 오른손 좌표계 위에 유클리드·맨해튼·체비쇼프·민코프스키·코사인 장면을 캔버스로 그린다."
+   }
+  },
+  {
+   "id": "lab:sim/haversine-globe",
+   "type": "Simulation",
+   "label": {
+    "ko": "지구본 위 호 (3D)",
+    "en": "Arc on a globe"
+   },
+   "anchor": "#stage",
+   "level": 2,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "서울과 런던을 잇는 호와 지구 속 직선을 같은 숫자로 그린다."
+   }
+  },
+  {
+   "id": "lab:sim/distance-code",
+   "type": "Simulation",
+   "label": {
+    "ko": "코드: 자마다 한 줄",
+    "en": "Code: one line per metric"
+   },
+   "anchor": "#stage",
+   "level": 1,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "거리 척도마다 계산하는 한 줄 코드."
+   }
+  },
+  {
+   "id": "lab:work/mathemetica-distance-metrics",
+   "type": "Work",
+   "label": {
+    "ko": "Distance metrics (인포그래픽)",
+    "en": "Distance metrics (인포그래픽)"
+   },
+   "anchor": "#export",
+   "level": 2,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "mentioned",
+   "match": []
+  },
+  {
+   "id": "lab:question/which-ruler",
+   "type": "Question",
+   "label": {
+    "ko": "어떤 자를 골라야 하나",
+    "en": "Which ruler to choose"
+   },
+   "anchor": "#stage",
+   "level": 2,
+   "status": "known",
+   "confidence": "high",
+   "coverage": "explained",
+   "domain": [
+    "geom",
+    "math",
+    "ml"
+   ],
+   "match": [],
+   "definition": {
+    "ko": "답이 여섯 개로 갈리는 질문. 무엇을 재고 싶은지(위치·말·땅 위 거리)에 따라 자를 고른다."
+   }
+  }
+ ],
+ "edges": [
+  {
+   "s": "lab:concept/distance-metric",
+   "p": "lab:broader",
+   "o": "lab:topic/metric-space",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/distance-metric",
+   "p": "lab:broader",
+   "o": "lab:topic/distance-angle",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/euclidean-distance",
+   "p": "lab:broader",
+   "o": "lab:topic/euclidean-space",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/manhattan-distance",
+   "p": "lab:broader",
+   "o": "lab:topic/normed-spaces",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/chebyshev-distance",
+   "p": "lab:broader",
+   "o": "lab:topic/normed-spaces",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/minkowski-distance",
+   "p": "lab:broader",
+   "o": "lab:topic/normed-spaces",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/unit-ball",
+   "p": "lab:broader",
+   "o": "lab:topic/normed-spaces",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/cosine-similarity",
+   "p": "lab:broader",
+   "o": "lab:topic/vectors-geometry",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/haversine-distance",
+   "p": "lab:broader",
+   "o": "lab:topic/geodesics",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/curved-space",
+   "p": "lab:broader",
+   "o": "lab:topic/non-euclidean-geometry",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/metric-inequality",
+   "p": "lab:broader",
+   "o": "lab:topic/normed-spaces",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/review-clustering",
+   "p": "lab:broader",
+   "o": "lab:topic/clustering",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/word-count-vector",
+   "p": "lab:broader",
+   "o": "lab:topic/text-vectorization",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/euclidean-distance",
+   "p": "lab:instanceOf",
+   "o": "lab:concept/distance-metric",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/manhattan-distance",
+   "p": "lab:instanceOf",
+   "o": "lab:concept/distance-metric",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/chebyshev-distance",
+   "p": "lab:instanceOf",
+   "o": "lab:concept/distance-metric",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/haversine-distance",
+   "p": "lab:instanceOf",
+   "o": "lab:concept/distance-metric",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/manhattan-distance",
+   "p": "lab:specialCaseOf",
+   "o": "lab:concept/minkowski-distance",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/euclidean-distance",
+   "p": "lab:specialCaseOf",
+   "o": "lab:concept/minkowski-distance",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/chebyshev-distance",
+   "p": "lab:specialCaseOf",
+   "o": "lab:concept/minkowski-distance",
+   "anchor": "#stage",
+   "confidence": "medium"
+  },
+  {
+   "s": "lab:concept/unit-ball",
+   "p": "lab:partOf",
+   "o": "lab:concept/minkowski-distance",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/euclidean-distance",
+   "p": "lab:prerequisiteOf",
+   "o": "lab:concept/manhattan-distance",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/euclidean-distance",
+   "p": "lab:contrastsWith",
+   "o": "lab:concept/cosine-similarity",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/word-count-vector",
+   "p": "lab:prerequisiteOf",
+   "o": "lab:concept/cosine-similarity",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/cosine-similarity",
+   "p": "lab:prerequisiteOf",
+   "o": "lab:concept/review-clustering",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/euclidean-distance",
+   "p": "lab:hasLimitation",
+   "o": "lab:concept/curved-space",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/curved-space",
+   "p": "lab:addressedBy",
+   "o": "lab:concept/haversine-distance",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/metric-inequality",
+   "p": "lab:partOf",
+   "o": "lab:concept/minkowski-distance",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/euclidean-distance",
+   "p": "lab:demonstratedBy",
+   "o": "lab:sim/distance-3d",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/minkowski-distance",
+   "p": "lab:demonstratedBy",
+   "o": "lab:sim/distance-3d",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/haversine-distance",
+   "p": "lab:demonstratedBy",
+   "o": "lab:sim/haversine-globe",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/distance-metric",
+   "p": "lab:demonstratedBy",
+   "o": "lab:sim/distance-code",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/distance-metric",
+   "p": "lab:raises",
+   "o": "lab:question/which-ruler",
+   "anchor": "#stage",
+   "confidence": "high"
+  },
+  {
+   "s": "lab:concept/distance-metric",
+   "p": "lab:relatedTo",
+   "o": "lab:work/mathemetica-distance-metrics",
+   "anchor": "#stage",
+   "confidence": "high"
+  }
+ ]
+}

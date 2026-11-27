@@ -1,0 +1,41 @@
+{
+ "title": "하루의 실험실 EP.04 1부 : 시아와 모아는 얼마나 멀까 — 공간 속 거리",
+ "number": "EP.04-1",
+ "series": "하루의 실험실 (조수 하루의 3차원 실험실)",
+ "about": [
+  "lab:concept/distance-metric",
+  "lab:concept/euclidean-distance",
+  "lab:concept/cosine-similarity",
+  "lab:concept/haversine-distance"
+ ],
+ "basedOn": [],
+ "educationalLevel": "입문",
+ "creator": [
+  {
+   "name": "Reon Ahn",
+   "role": "author"
+  }
+ ],
+ "contributor": [
+  {
+   "name": "AI 보조 제작",
+   "role": "assistant"
+  }
+ ],
+ "date": "2026-11-28",
+ "version": "1.1",
+ "language": [
+  "ko"
+ ],
+ "license": "CC BY-NC 4.0",
+ "url": "https://adminmrobo.github.io/Distance-metrics-tutorial/",
+ "registry": "KG_00_registry 0.3",
+ "learningResourceType": "interactive explainer",
+ "seeAlso": "https://adminmrobo.github.io/ahnboat_lab_cover_status/ontology.html",
+ "domain": [
+  "geom",
+  "math",
+  "ml"
+ ],
+ "suggestedCitation": "Reon Ahn (2026). 하루의 실험실 EP.04 1부 : 시아와 모아는 얼마나 멀까 — 공간 속 거리. 하루의 실험실 (조수 하루의 3차원 실험실) EP.04-1, v1.1."
+}
