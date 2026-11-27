@@ -49,9 +49,10 @@ for part, keys, out in ((1, ("position", "cosine", "globe"), "index.html"),
                "alt": "1부 클리어: 유클리드 9.899, 맨해튼 16, 체비쇼프 8, 민코프스키 8.724, 코사인 0.990, 하버사인 8,857 km. 해밍·자카드·다이스는 2부에서 열립니다."}
     else:
         end = {"title": "EP.04 CLEAR!", "sub": "1부 · 2부 완주 · 자 아홉 개를 모두 모았어요", "cards": cards,
-               "line": "EP.04 완주! 자 아홉 개를 모두 모았어요. 2층 실험실에서 또 만나요!",
+               "cert": True, "stamp": hm["easy"]["original"],                  # 완주 인증서에 찍는 등록 원본 인영
+               "line": "EP.04 완주! 박사님 진품 도장이 찍힌 인증서예요. 자 아홉 개를 모두 모았어요!",
                "links": [["↺ 처음부터", ""], ["1부 다시 보기", "../"], ["2층 실험실 ↗", lab]],
-               "alt": "EP.04 클리어: 자 아홉 개 — 유클리드 9.899, 맨해튼 16, 체비쇼프 8, 민코프스키 8.724, 코사인 0.990, 하버사인 8,857 km, 해밍 13 · 67, 자카드 0.705, 다이스 0.827."}
+               "alt": "EP.04 클리어: 박사 도장(원본과 다른 점 0점)이 찍힌 완주 인증서, 자 아홉 개 — 유클리드 9.899, 맨해튼 16, 체비쇼프 8, 민코프스키 8.724, 코사인 0.990, 하버사인 8,857 km, 해밍 13 · 67, 자카드 0.705, 다이스 0.827."}
     s = s.replace("__END__", f"const END={json.dumps(end, ensure_ascii=False)};\n" + open("tools/end.js", encoding="utf-8").read())
     s = s.replace("__SCRIPT__", json.dumps(lines, ensure_ascii=False, separators=(",", ":")))
     os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
