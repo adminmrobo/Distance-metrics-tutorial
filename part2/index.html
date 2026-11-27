@@ -79,6 +79,10 @@ code{font:12px ui-monospace,Menlo,monospace}
 .parts .on{background:var(--ink);color:#fff;border-color:var(--ink)}
 .parts .soon{color:var(--mute);border-style:dashed}
 @media (max-width:900px){.hero{grid-template-columns:1fr}.hero img{max-width:520px}}
+.endbtn{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:99px;border:1px solid var(--line);background:#fff;color:#18202c;font:700 13px system-ui;text-decoration:none;cursor:pointer;margin:2px}
+.endbtn:first-child{background:#18202c;color:#fff;border-color:#18202c}
+.dots .endbtn{width:auto;height:auto;min-width:0;border-radius:99px;font-size:13px;white-space:nowrap;background:#fff;color:#18202c;border:1px solid #fff}
+.dots .endbtn:first-child{background:#f5c451;border-color:#f5c451;color:#18202c}
 </style>
 </head>
 <body>
@@ -362,6 +366,28 @@ function comicScene(si,f,T){const n=COMIC.img.length,last=si===n-1,k=last?ease(M
   badge(`${si+1} / ${n}`,px+30,py+18,{s:12,col:C.ink,al:1-k})}
 S.unshift(comicScene);ALT.unshift(COMIC.alt);
 
+const END={"title": "EP.04 CLEAR!", "sub": "1부 · 2부 완주 · 자 아홉 개를 모두 모았어요", "cards": [{"name": "유클리드", "val": "9.899", "note": "시아 ↔ 모아 직선", "col": "sum"}, {"name": "맨해튼", "val": "16", "note": "격자를 따라", "col": "vio"}, {"name": "체비쇼프", "val": "8", "note": "가장 많이 움직인 축", "col": "cyan"}, {"name": "민코프스키", "val": "8.724", "note": "p = 3", "col": "ink"}, {"name": "코사인", "val": "0.990", "note": "두 사람의 후기", "col": "drop"}, {"name": "하버사인", "val": "8,857 km", "note": "서울 ↔ 런던", "col": "plain"}, {"name": "해밍", "val": "13 · 67", "note": "도장에서 다른 점", "col": "sum"}, {"name": "자카드", "val": "0.705", "note": "해적판 피규어", "col": "drop"}, {"name": "쇠렌센-다이스", "val": "0.827", "note": "해적판 피규어", "col": "cyan"}], "line": "EP.04 완주! 자 아홉 개를 모두 모았어요. 2층 실험실에서 또 만나요!", "links": [["↺ 처음부터", ""], ["1부 다시 보기", "../"], ["2층 실험실 ↗", "https://adminmrobo.github.io/ahn_boat_lab_town/haru3d.html"]], "alt": "EP.04 클리어: 자 아홉 개 — 유클리드 9.899, 맨해튼 16, 체비쇼프 8, 민코프스키 8.724, 코사인 0.990, 하버사인 8,857 km, 해밍 13 · 67, 자카드 0.705, 다이스 0.827."};
+/* ---------- 마지막 대사가 끝나면: 클리어 이벤트 (1부·2부 공통) ----------
+   픽셀 색종이 + 자 카드가 한 장씩 뒤집히며 나타나고, 하루가 축하한다. 숫자는 실험 기록(D)에서 가져온다. */
+const ENDCARDS=END.cards;
+const CONF=(()=>{let a=7;const r=()=>(a=(a*16807)%2147483647)/2147483647;return Array.from({length:90},()=>({x:r(),d:r(),s:4+r()*5,v:.18+r()*.25,w:r()*6.28,k:Math.floor(r()*5)}))})();
+function endScene(t){const NW=W<560,pal=[C.sum,C.plain,C.drop,C.vio,C.cyan];c.fillStyle=C.bg;c.fillRect(0,0,W,H);
+  /* 픽셀 색종이 */
+  CONF.forEach(p=>{const y=((p.d+t*p.v*(REDUCE?0:1))%1.1-.05)*H,x=p.x*W+Math.sin(t*1.3+p.w)*14;c.fillStyle=pal[p.k];c.globalAlpha=.75;c.fillRect(Math.round(x),Math.round(y),p.s,p.s)});c.globalAlpha=1;
+  /* 제목 */
+  const pop=ease(Math.min(1,t*1.6)),ts=(NW?24:38)*(.6+.4*pop);txt(END.title,W/2,(NW?34:50),{a:"center",s:ts,w:900,col:C.sum,al:pop,mono:1});
+  txt(END.sub,W/2,(NW?56:80),{a:"center",s:NW?11:14,w:700,col:C.ink,al:ease(t*1.2-.4)});
+  /* 자 카드 3 × 3 */
+  const cols=3,gap=NW?6:12,top=NW?70:100,cw=Math.min(NW?(W-28-2*gap)/3:200,(W-28-2*gap)/3),ch=Math.min(NW?(H-top-42-2*gap)/3:(H-top-34-2*gap)/3,96),x0=(W-(cols*cw+(cols-1)*gap))/2;
+  ENDCARDS.forEach((cd,i)=>{const x=x0+(i%cols)*(cw+gap),y=top+Math.floor(i/cols)*(ch+gap),k=Math.max(0,Math.min(1,(t-.6-i*.22)*3)),sx=Math.abs(Math.cos((1-k)*Math.PI/2));if(k<=0)return;
+    c.save();c.translate(x+cw/2,y+ch/2);c.scale(Math.max(.02,k<1?sx:1),1);c.translate(-cw/2,-ch/2);
+    const lock=cd.lock;c.fillStyle=lock?C.off:C.panel;c.fillRect(0,0,cw,ch);const col=C[cd.col]||C.ink;c.strokeStyle=lock?C.border:col;c.lineWidth=2;c.strokeRect(0,0,cw,ch);c.fillStyle=lock?C.border:col;c.fillRect(0,0,cw,NW?4:6);
+    if(lock){txt("?",cw/2,ch*.42,{a:"center",s:NW?18:30,w:900,col:C.mute});txt(cd.name,cw/2,ch*.68,{a:"center",s:NW?9:12,w:700,col:C.mute});txt("2부에서 열려요",cw/2,ch-(NW?4:8),{a:"center",s:NW?8:10,col:C.mute})}
+    else{txt(cd.name,8,NW?18:26,{s:NW?10:13,w:800,col});txt(cd.val,8,ch*.66,{s:NW?(cd.val.length>8?11:14):(cd.val.length>9?17:22),mono:1,w:800,col:C.ink});txt(cd.note,8,ch-(NW?6:10),{s:NW?8:10,col:C.mute})}
+    c.restore();
+    if(k>=1&&t-.6-i*.22<.6&&!lock){c.globalAlpha=1-(t-.6-i*.22-.33)/.27;c.strokeStyle=C.sum;c.lineWidth=3;c.strokeRect(x-3,y-3,cw+6,ch+6);c.globalAlpha=1}});
+  const done=t>.6+ENDCARDS.length*.22+.4;if(done){const g=ENDCARDS.filter(cd=>!cd.lock).length;badge(`자 ${g}개 획득!`,W/2,H-(NW?10:16),{s:NW?12:15,col:C.sum,al:ease((t-.6-ENDCARDS.length*.22-.4)*2)})}}
+
 
 /* ---------- player (no audio: lines advance by reading time) ---------- */
 let started=false,part=0,si=0,f=0,playing=false,t0=performance.now(),lineStart=performance.now(),pausedAt=0,speed=1;
@@ -374,14 +400,17 @@ function renderSide(){$("#lines").innerHTML=P[part].lines.map((l,i)=>`<li data-i
   [...nav.children].forEach((b,j)=>b.classList.toggle("on",j===part))}
 function setLine(i){si=i;f=0;lineStart=performance.now();renderSide();$("#alt").textContent=ALT[part]}
 function go(i,s=0){part=i;t0=performance.now();setLine(s)}
-let ended=false;
+let ended=false,endT=0;
 function togglePlay(){if(ended){ended=false;go(0)}playing=!playing;started=true;$("#play").textContent=playing?"❚❚ 일시정지":"▶ 재생";if(playing)lineStart=performance.now()-f*durOf(part,si)*1000}
 const playOn=()=>{if(!playing)togglePlay()};
 $("#play").onclick=togglePlay;$("#prevp").onclick=()=>{ended=false;go(Math.max(0,part-1));playOn()};$("#nextp").onclick=()=>{ended=false;go(Math.min(P.length-1,part+1));playOn()};
-$("#dots").onclick=e=>{const b=e.target.closest("button");if(b){ended=false;setLine(+b.dataset.i);playOn()}};$("#lines").onclick=e=>{const l=e.target.closest("li");if(l){ended=false;setLine(+l.dataset.i);playOn()}};
+$("#dots").onclick=e=>{const b=e.target.closest("button");if(b&&b.dataset.restart){togglePlay();return}if(b){ended=false;setLine(+b.dataset.i);playOn()}};$("#lines").onclick=e=>{const l=e.target.closest("li");if(l){ended=false;setLine(+l.dataset.i);playOn()}};
 $("#spd").onchange=e=>{const k=f;speed=+e.target.value;lineStart=performance.now()-k*durOf(part,si)*1000};
-$("#stage").addEventListener("click",e=>{if(e.target.closest("button"))return;if(!playing)togglePlay();else advance()});
-function advance(){if(si+1<P[part].lines.length)setLine(si+1);else if($("#auto").checked&&part<P.length-1)go(part+1);else{f=1;if(playing)togglePlay();if(part===P.length-1){ended=true;$("#play").textContent="↺ 처음부터"}}}
+$("#stage").addEventListener("click",e=>{if(e.target.closest("button,a")||ended)return;if(!playing)togglePlay();else advance()});
+function advance(){if(si+1<P[part].lines.length)setLine(si+1);else if($("#auto").checked&&part<P.length-1)go(part+1);else{f=1;if(playing)togglePlay();if(part===P.length-1)finish()}}
+/* 마지막 대사 뒤: 클리어 이벤트와 다음 길 버튼 */
+function finish(){ended=true;endT=lineStart=performance.now();$("#play").textContent="↺ 처음부터";$("#alt").textContent=END.alt;
+  $("#dots").innerHTML=END.links.map(([t,h])=>h?`<a class="endbtn" href="${h}">${t}</a>`:`<button class="endbtn" data-restart="1">${t}</button>`).join("");$("#ltitle").textContent="클리어!";$("#lines").innerHTML=`<li class="on">${esc(END.line)}</li>`}
 document.addEventListener("keydown",e=>{if(e.target.tagName==="SELECT")return;if(e.key===" "){e.preventDefault();togglePlay()}if(e.key==="ArrowRight")advance();if(e.key==="ArrowLeft")si>0?setLine(si-1):go(Math.max(0,part-1))});
 
 let dpr=1;function size(){dpr=devicePixelRatio||1;const w=cv.parentElement.clientWidth;W=w;H=Math.max(300,Math.min(540,Math.round(w*.62)));cv.width=W*dpr;cv.height=H*dpr;cv.style.height=H+"px"}
@@ -389,12 +418,12 @@ new ResizeObserver(size).observe(cv.parentElement);size();
 let lastTxt="",lastWho="";
 function loop(){const now=performance.now(),T=(now-t0)/1000,el=(now-lineStart)/1000,d=durOf(part,si);
   if(playing){f=Math.min(1,el/d);if(el>d+.6/speed)advance()}else if(!started||el<d){f=Math.max(f,Math.min(1,el/d))}
-  const line=P[part].lines[si][0],nch=Math.min(line.length,Math.floor(el*22*speed)+1),typing=nch<line.length;
+  const line=ended?END.line:P[part].lines[si][0],nch=Math.min(line.length,Math.floor(el*22*speed)+1),typing=nch<line.length;
   const shown=line.slice(0,nch);if(shown!==lastTxt){$("#cur").textContent=shown;lastTxt=shown}$("#caret").style.visibility=typing?"visible":"hidden";
-  const ex=(EXP[part]&&EXP[part][si])||"neutral";drawHaru(ex,typing&&Math.floor(now/160)%2===0);
-  const who=(P[part].who&&P[part].who[si])||"조수 하루";if(who!==lastWho){$(".bubble .who").textContent=who;himg.alt=who;lastWho=who}
+  const ex=ended?"cheer":(EXP[part]&&EXP[part][si])||"neutral";drawHaru(ex,typing&&Math.floor(now/160)%2===0);
+  const who=ended?"조수 하루":(P[part].who&&P[part].who[si])||"조수 하루";if(who!==lastWho){$(".bubble .who").textContent=who;himg.alt=who;lastWho=who}
   c=cv.getContext("2d");c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,W,H);
-  try{S[part](si,f,T)}catch(e){console.error(e)}
+  try{ended?endScene((now-endT)/1000):S[part](si,f,T)}catch(e){console.error(e)}
   const pos=(P[part].lines.slice(0,si).reduce((a,_,i)=>a+durOf(part,i),0)+f*d)/partDur(part);
   for(let i=0;i<P.length;i++)$("#pb"+i).style.width=(i<part?100:i===part?Math.min(100,pos*100):0)+"%";
   requestAnimationFrame(loop)}
