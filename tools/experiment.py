@@ -112,6 +112,7 @@ G = [genuine_print() for _ in range(M)]; F = [forged_print() for _ in range(M)]
 feat = lambda a: np.concatenate([((a == 1) & (orig == 0)).ravel(), ((a == 0) & (orig == 1)).ravel()]).astype(float)
 X = np.array([feat(a) for a in G + F]); y = np.r_[np.zeros(M), np.ones(M)]
 Hd = np.array([hd(a, orig) for a in G + F])
+XH, yH = X, y                                                # 도장 학습 데이터 (아래 피규어 격자 X와 이름이 겹치지 않게)
 idx = rng.permutation(2 * M); tr, te = idx[:600], idx[600:]
 thr = max(range(200), key=lambda t: ((Hd[tr] > t) == y[tr]).mean())
 from sklearn.linear_model import LogisticRegression
@@ -186,6 +187,19 @@ def xyz(lat, lon, r=6371.0):
 globe = {"sia": seoul, "moa": london,
          "haversine_km": R(haversine(*seoul, *london), 0),
          "straight_through_km": R(np.linalg.norm(xyz(*seoul) - xyz(*london)), 0)}
+
+# ── 6. 2부 장면용 기록 (위 숫자는 바꾸지 않고 덧붙임) ─────────────────
+hard["genuine_h"] = [int(v) for v in Hd[:M]]                 # 진품 400장의 다른 점 수
+hard["forged_h"] = [int(v) for v in Hd[M:]]                  # 위작 400장의 다른 점 수
+curve = []
+for n in (2, 4, 6, 8, 10, 12, 16, 20, 30, 50, 100, 600):     # 학습 장 수 → 시험 200장 정확도
+    sub = tr[:n]
+    if len(set(yH[sub])) < 2: continue
+    mdl = LogisticRegression(C=0.5, max_iter=3000).fit(XH[sub], yH[sub])
+    curve.append([n, R(mdl.score(XH[te], yH[te]), 3)])
+hard["learning_curve"] = curve
+enc = lambda v: [int(i) for i in np.flatnonzero(v.ravel())]  # x*N*N + y*N + z
+overlap["voxels"] = {"official": enc(official), "sia": enc(sia_fig), "moa": enc(moa_fig)}
 
 run = {"seed": SEED, "position": position, "cosine": cosine,
        "hamming": hamming, "overlap": overlap, "globe": globe}
