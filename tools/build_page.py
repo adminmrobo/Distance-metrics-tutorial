@@ -17,8 +17,16 @@ for part, keys, out in ((1, ("position", "cosine", "globe"), "index.html"),
     s = s.replace("__SCENES__", open(f"tools/scenes_part{part}.js", encoding="utf-8").read())
     s = s.replace("__HARU__", sprites)
     s = s.replace("__DATA__", json.dumps(data, ensure_ascii=False, separators=(",", ":")))
-    s = s.replace("__EXP__", open(f"data/haru_exp_part{part}.json", encoding="utf-8").read())
     lines = json.load(open(f"data/haru_lines_part{part}.json", encoding="utf-8"))
+    comic = json.load(open(f"data/comic_part{part}.json", encoding="utf-8"))          # 0번 파트: 만화로 보는 상황
+    lines = [{"t": comic["t"], "code": [], "who": comic["who"], "lines": [[x, x] for x in comic["lines"]]}] + lines
+    exp = [comic["exp"]] + json.load(open(f"data/haru_exp_part{part}.json", encoding="utf-8"))
+    base = "images/" if part == 1 else "../images/"
+    comic["img"] = [x if os.path.exists(f"images/comic/{x}.webp") else None for x in comic["img"]]   # 아직 없는 그림은 표지로 대신
+    head = (f"const COMIC={json.dumps({k: comic[k] for k in ('img', 'faces', 'alt')}, ensure_ascii=False)},"
+            f"COMIC_BASE={json.dumps(base + 'comic/')},COVER_SRC={json.dumps(base + f'cover_part{part}.webp')};\n")
+    s = s.replace("__COMIC__", head + open("tools/comic.js", encoding="utf-8").read())
+    s = s.replace("__EXP__", json.dumps(exp))
     s = s.replace("__SCRIPT__", json.dumps(lines, ensure_ascii=False, separators=(",", ":")))
     os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
     open(out, "w", encoding="utf-8").write(s)

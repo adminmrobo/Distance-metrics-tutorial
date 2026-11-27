@@ -144,7 +144,7 @@ const CODE=[["import numpy as np",""],
 ["km = 2 * 6371 * np.arcsin(np.sqrt(h))","# 8,857"]];
 const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
 $("#code").innerHTML=CODE.map((l,i)=>`<span class="ln" id="L${i+1}"><span class="n">${String(i+1).padStart(2," ")}</span>${esc(l[0])}  <span class="c">${esc(l[1])}</span></span>`).join("");
-const CODE_BY={7:[[1],[3,4,5,6],[8,9],[10,11,12]],8:[[4,5,6,7],[4,5,6],[9,12]]};
+const CODE_BY={8:[[1],[3,4,5,6],[8,9],[10,11,12]],8:[[4,5,6,7],[4,5,6],[9,12]]};
 
 /* ---------- theme ---------- */
 const TH={dark:{bg:"#0b111c",panel:"#0f1828",border:"#22304a",ink:"#e8eef7",mute:"#8b97a8",grid:"#1a2639",plain:"#ff6a4d",drop:"#4fb4ff",sum:"#f5c451",off:"#3b475b",dash:"#8692a6",vio:"#b48cff",cyan:"#5fd8f0",glow:1,X:"#ff6a4d",Y:"#3cc48c",Z:"#4fb4ff"},
@@ -206,12 +206,14 @@ const EXP=__EXP__;
 /* 3D가 그려지지 않는 환경을 위한 한 줄 글 */
 const ALT=["좌표 방의 시아 (4, 0, 10)와 공중 발판의 모아 (12, 5, 7). 자에 따라 거리가 9.899, 16, 8, 8.724, 코사인 0.990, 8,857 km로 달라집니다.","차이 Δ = (8, 5, −3). 제곱해 더한 98의 제곱근, 유클리드 거리 9.899.","축을 따라 꺾어 걸으면 8 + 5 + 3 = 16(맨해튼), 가장 큰 축 하나만 보면 8(체비쇼프).","민코프스키 거리: p = 1이면 16, p = 2면 9.899, p = 3이면 8.724, p = 8이면 8.023. 거리가 1인 면은 정팔면체 → 공 → 정육면체.","후기 벡터(표정, 도색, 배송): 시아 (2, 1, 0), 모아 (6, 2, 0). 끝과 끝 4.123, 각도 8.1°, 코사인 0.990.","후기 여섯 개가 표정(시아·모아), 도색(초파리·박사), 배송(주판봇·X1) 세 묶음으로 모입니다.","서울–런던: 지구 표면을 따라 8,857 km, 지구 속 직선 8,161 km.","거리 여섯 가지의 계산식: 제곱합의 제곱근, 절댓값 합, 최댓값, p제곱합의 1/p제곱, 내적/길이 곱, 하버사인.","위치 8 · 8.724 · 9.899 · 16, 후기 코사인 0.990, 서울–런던 8,857 km.","자가 답을 정합니다. 코사인은 글 길이를, 하버사인은 지구의 납작함을 버립니다. 2부는 같은 것인가."];
 
+__COMIC__
+
 /* ---------- player (no audio: lines advance by reading time) ---------- */
 let started=false,part=0,si=0,f=0,playing=false,t0=performance.now(),lineStart=performance.now(),pausedAt=0,speed=1;
 const durOf=(p,i)=>(1.6+P[p].lines[i][0].length*.11)/speed;
 const partDur=p=>P[p].lines.reduce((a,_,i)=>a+durOf(p,i)+.6/speed,0);
-const nav=$("#nav");P.forEach((p,i)=>{const b=document.createElement("button");b.innerHTML=`${i+1}. ${p.t}<small>${P[i].lines.length}마디</small><div class="bar"><i id="pb${i}"></i></div>`;b.onclick=()=>{go(i);if(!playing)togglePlay()};nav.appendChild(b)});
-function renderSide(){$("#lines").innerHTML=P[part].lines.map((l,i)=>`<li data-i="${i}" class="${i===si?"on":""}">${esc(l[0])}</li>`).join("");$("#ltitle").textContent=`파트 ${part+1} 대사 — ${P[part].t}`;
+const nav=$("#nav");P.forEach((p,i)=>{const b=document.createElement("button");b.innerHTML=`${i}. ${p.t}<small>${P[i].lines.length}마디</small><div class="bar"><i id="pb${i}"></i></div>`;b.onclick=()=>{go(i);if(!playing)togglePlay()};nav.appendChild(b)});
+function renderSide(){$("#lines").innerHTML=P[part].lines.map((l,i)=>`<li data-i="${i}" class="${i===si?"on":""}">${esc(l[0])}</li>`).join("");$("#ltitle").textContent=`파트 ${part} 대사 — ${P[part].t}`;
   $("#dots").innerHTML=P[part].lines.map((_,i)=>`<button data-i="${i}" class="${i===si?"on":""}" aria-label="대사 ${i+1}">${i+1}</button>`).join("");
   const hl=(CODE_BY[part]&&CODE_BY[part][si])||P[part].code;for(let i=1;i<=CODE.length;i++)$("#L"+i).classList.toggle("hl",hl.includes(i));
   [...nav.children].forEach((b,j)=>b.classList.toggle("on",j===part))}
@@ -227,12 +229,13 @@ document.addEventListener("keydown",e=>{if(e.target.tagName==="SELECT")return;if
 
 let dpr=1;function size(){dpr=devicePixelRatio||1;const w=cv.parentElement.clientWidth;W=w;H=Math.max(300,Math.min(540,Math.round(w*.62)));cv.width=W*dpr;cv.height=H*dpr;cv.style.height=H+"px"}
 new ResizeObserver(size).observe(cv.parentElement);size();
-let lastTxt="";
+let lastTxt="",lastWho="";
 function loop(){const now=performance.now(),T=(now-t0)/1000,el=(now-lineStart)/1000,d=durOf(part,si);
   if(playing){f=Math.min(1,el/d);if(el>d+.6/speed)advance()}else if(!started||el<d){f=Math.max(f,Math.min(1,el/d))}
   const line=P[part].lines[si][0],nch=Math.min(line.length,Math.floor(el*22*speed)+1),typing=nch<line.length;
   const shown=line.slice(0,nch);if(shown!==lastTxt){$("#cur").textContent=shown;lastTxt=shown}$("#caret").style.visibility=typing?"visible":"hidden";
   const ex=(EXP[part]&&EXP[part][si])||"neutral";drawHaru(ex,typing&&Math.floor(now/160)%2===0);
+  const who=(P[part].who&&P[part].who[si])||"조수 하루";if(who!==lastWho){$(".bubble .who").textContent=who;himg.alt=who;lastWho=who}
   c=cv.getContext("2d");c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,W,H);
   try{S[part](si,f,T)}catch(e){console.error(e)}
   const pos=(P[part].lines.slice(0,si).reduce((a,_,i)=>a+durOf(part,i),0)+f*d)/partDur(part);

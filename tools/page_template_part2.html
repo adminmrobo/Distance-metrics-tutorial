@@ -143,7 +143,7 @@ const CODE=[["import numpy as np",""],
 ["dice = 2 * inter / (fig.sum() + official.sum())","# 0.827"]];
 const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
 $("#code").innerHTML=CODE.map((l,i)=>`<span class="ln" id="L${i+1}"><span class="n">${String(i+1).padStart(2," ")}</span>${esc(l[0])}  <span class="c">${esc(l[1])}</span></span>`).join("");
-const CODE_BY={7:[[1,2],[3],[4,5,6,7,8],[9,10,11]]};
+const CODE_BY={8:[[1,2],[3],[4,5,6,7,8],[9,10,11]]};
 
 /* ---------- theme ---------- */
 const TH={dark:{bg:"#0b111c",panel:"#0f1828",border:"#22304a",ink:"#e8eef7",mute:"#8b97a8",grid:"#1a2639",plain:"#ff6a4d",drop:"#4fb4ff",sum:"#f5c451",off:"#3b475b",dash:"#8692a6",vio:"#b48cff",cyan:"#5fd8f0",glow:1,X:"#ff6a4d",Y:"#3cc48c",Z:"#4fb4ff"},
@@ -205,12 +205,14 @@ const EXP=__EXP__;
 /* 3D가 그려지지 않는 환경을 위한 한 줄 글 */
 const ALT=["원본, 시아, 모아 도장 인영. 어려운 판 시험 200장 정확도는 해밍 기준선 0.900, AI 모델 1.000.","박사 얼굴 도장을 32 × 32 = 1,024점으로 바꾸고 원본과 다른 점을 셉니다. 시아 13점, 모아 67점(흰 앞머리 줄이 빠짐).","진품 400장과 위작 400장의 다른 점 수가 겹칩니다. 기준선 26점이면 정확도 0.900. 시아 진품 30점, 모아 위작 19점.","원본보다 더 묻은 점(금색)과 빠진 점(보라)을 따로 그린 지도. 위작은 한쪽은 더 묻고 반대쪽은 빠집니다.","지도 두 장의 값 2,048개를 로지스틱 회귀에 넣습니다. 학습 2장 0.695, 16장부터 1.000 가까이, 600장으로 시험 200장을 모두 맞힙니다.","모델 가중치를 높이로 세우면 잉크 경계를 따라 기둥이 섭니다. 위작 확률 시아 0.070, 모아 0.974.","하루 피규어 블록 1,204개. 모아 정품 자카드 0.996, 시아 해적판 자카드 0.705, 다이스 0.827.","해밍 한 줄, 지도 두 장과 로지스틱 회귀, 교집합을 합집합이나 크기 합으로 나누는 자카드·다이스.","쉬운 판 13 vs 67, 어려운 판 0.900 vs 1.000, 피규어 다이스 0.998 vs 0.827.","거리는 같은 것인가를 묻는 자이기도 합니다. 모델은 위작 예시가 있어야 배웁니다."];
 
+__COMIC__
+
 /* ---------- player (no audio: lines advance by reading time) ---------- */
 let started=false,part=0,si=0,f=0,playing=false,t0=performance.now(),lineStart=performance.now(),pausedAt=0,speed=1;
 const durOf=(p,i)=>(1.6+P[p].lines[i][0].length*.11)/speed;
 const partDur=p=>P[p].lines.reduce((a,_,i)=>a+durOf(p,i)+.6/speed,0);
-const nav=$("#nav");P.forEach((p,i)=>{const b=document.createElement("button");b.innerHTML=`${i+1}. ${p.t}<small>${P[i].lines.length}마디</small><div class="bar"><i id="pb${i}"></i></div>`;b.onclick=()=>{go(i);if(!playing)togglePlay()};nav.appendChild(b)});
-function renderSide(){$("#lines").innerHTML=P[part].lines.map((l,i)=>`<li data-i="${i}" class="${i===si?"on":""}">${esc(l[0])}</li>`).join("");$("#ltitle").textContent=`파트 ${part+1} 대사 — ${P[part].t}`;
+const nav=$("#nav");P.forEach((p,i)=>{const b=document.createElement("button");b.innerHTML=`${i}. ${p.t}<small>${P[i].lines.length}마디</small><div class="bar"><i id="pb${i}"></i></div>`;b.onclick=()=>{go(i);if(!playing)togglePlay()};nav.appendChild(b)});
+function renderSide(){$("#lines").innerHTML=P[part].lines.map((l,i)=>`<li data-i="${i}" class="${i===si?"on":""}">${esc(l[0])}</li>`).join("");$("#ltitle").textContent=`파트 ${part} 대사 — ${P[part].t}`;
   $("#dots").innerHTML=P[part].lines.map((_,i)=>`<button data-i="${i}" class="${i===si?"on":""}" aria-label="대사 ${i+1}">${i+1}</button>`).join("");
   const hl=(CODE_BY[part]&&CODE_BY[part][si])||P[part].code;for(let i=1;i<=CODE.length;i++)$("#L"+i).classList.toggle("hl",hl.includes(i));
   [...nav.children].forEach((b,j)=>b.classList.toggle("on",j===part))}
@@ -226,12 +228,13 @@ document.addEventListener("keydown",e=>{if(e.target.tagName==="SELECT")return;if
 
 let dpr=1;function size(){dpr=devicePixelRatio||1;const w=cv.parentElement.clientWidth;W=w;H=Math.max(300,Math.min(540,Math.round(w*.62)));cv.width=W*dpr;cv.height=H*dpr;cv.style.height=H+"px"}
 new ResizeObserver(size).observe(cv.parentElement);size();
-let lastTxt="";
+let lastTxt="",lastWho="";
 function loop(){const now=performance.now(),T=(now-t0)/1000,el=(now-lineStart)/1000,d=durOf(part,si);
   if(playing){f=Math.min(1,el/d);if(el>d+.6/speed)advance()}else if(!started||el<d){f=Math.max(f,Math.min(1,el/d))}
   const line=P[part].lines[si][0],nch=Math.min(line.length,Math.floor(el*22*speed)+1),typing=nch<line.length;
   const shown=line.slice(0,nch);if(shown!==lastTxt){$("#cur").textContent=shown;lastTxt=shown}$("#caret").style.visibility=typing?"visible":"hidden";
   const ex=(EXP[part]&&EXP[part][si])||"neutral";drawHaru(ex,typing&&Math.floor(now/160)%2===0);
+  const who=(P[part].who&&P[part].who[si])||"조수 하루";if(who!==lastWho){$(".bubble .who").textContent=who;himg.alt=who;lastWho=who}
   c=cv.getContext("2d");c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,W,H);
   try{S[part](si,f,T)}catch(e){console.error(e)}
   const pos=(P[part].lines.slice(0,si).reduce((a,_,i)=>a+durOf(part,i),0)+f*d)/partDur(part);
