@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>하루의 실험실 EP.04 1부 : 시아와 모아는 얼마나 멀까 — 공간 속 거리</title>
+<meta name="description" content="실험조수 하루가 2층 좌표 방의 시아 (4, 0, 10)와 모아 (12, 5, 7) 사이를 유클리드 9.899·맨해튼 16·체비쇼프 8·민코프스키로 재고, 피규어 후기 코사인 0.990, 서울–런던 하버사인 8,857 km까지 숫자와 그림으로 설명합니다.">
+<style>
+/* VOICE: 조수 하루가 실험 결과를 발표하는 차분한 해설
+   IDEA: 어두운 '무대' 위 좌표 방에서 시아와 모아 사이를 여러 자로 잰다
+   PICTURE: 캔버스로 다시 그린 장면(3D 좌표 방, 민코프스키 면, 후기 화살표, 지구본)
+   COLOUR and TYPE: 흰 페이지, 무대는 기본 어둡게 — 밝은 무대로도 전환
+   LAYOUT: 왼쪽 파트 목록, 가운데 무대와 말풍선, 오른쪽 코드 (EP.01 틀과 같음) */
+:root{--ink:#18202c;--mute:#6b7686;--line:#e3e8ef;--soft:#f5f7fa;--plain:#e4572e;--drop:#1f8fd6;--accent:#e0a21b}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:#fff;color:var(--ink);font:15px/1.6 "Pretendard","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;overflow-x:clip}
+header{padding:22px max(3vw,16px) 12px;border-bottom:1px solid var(--line)}
+header h1{margin:0;font-size:clamp(22px,3vw,30px);line-height:1.2}
+header p{margin:4px 0 0;color:var(--mute);font-size:14px}
+.kpis{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.kpi{border:1px solid var(--line);border-radius:10px;padding:6px 12px}
+.kpi b{font-size:19px;font-variant-numeric:tabular-nums;margin-right:6px}
+.kpi span{font-size:12px;color:var(--mute)}
+.app{display:grid;grid-template-columns:210px minmax(0,1fr) 360px;gap:0;align-items:start}
+nav{padding:12px 8px;background:var(--soft);border-right:1px solid var(--line);min-height:calc(100vh - 140px)}
+nav button{display:block;width:100%;text-align:left;border:0;background:none;padding:8px 10px;border-radius:8px;font:inherit;font-size:14px;color:var(--ink);cursor:pointer;min-height:44px}
+nav button small{color:var(--mute);font-size:11px;margin-left:4px}
+nav button.on{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.08);font-weight:700}
+nav .bar{height:3px;background:var(--line);border-radius:2px;margin-top:4px;overflow:hidden}
+nav .bar i{display:block;height:100%;width:0;background:var(--drop)}
+.center{padding:16px clamp(12px,2vw,24px)}
+.stage{border-radius:16px;overflow:hidden;background:var(--sbg);transition:background .3s}
+.stage .ttl{text-align:center;padding:14px 10px 2px;color:var(--sink)}
+.stage .ttl b{display:block;font-size:30px;font-weight:500;letter-spacing:.01em}
+.stage .ttl span{font:13px ui-monospace,Menlo,monospace;color:var(--smute)}
+.stage .kick{font:700 11px system-ui;color:#ff5a4a;letter-spacing:.08em}
+.fig{position:relative;margin:8px 12px 0}
+.fig canvas{display:block;width:100%}
+.sub{padding:12px 18px 16px;min-height:76px;color:var(--sink);font-size:17px;line-height:1.55;text-align:center}
+.sub .prev{display:block;font-size:13px;color:var(--smute);margin-bottom:2px;min-height:20px}
+.ctrl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.ctrl button,.ctrl select{border:1px solid var(--line);background:#fff;border-radius:10px;padding:0 14px;height:44px;font:inherit;font-size:14px;cursor:pointer;color:var(--ink)}
+.ctrl button.main{background:var(--ink);color:#fff;border-color:var(--ink);min-width:110px}
+.ctrl label{font-size:13px;color:var(--mute);display:flex;gap:6px;align-items:center}
+.dots{display:flex;gap:6px;justify-content:center;padding-bottom:12px}
+.dots button{width:26px;height:26px;border-radius:50%;border:0;background:var(--sgrid);color:var(--smute);font:11px system-ui;cursor:pointer}
+.dots button.on{background:var(--drop);color:#fff}
+aside{padding:16px 16px 16px 0}
+.card{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px;background:#fff}
+.card h3{margin:0 0 8px;font-size:13px;color:var(--mute);font-weight:600}
+pre{margin:0;font:12px/1.7 "JetBrains Mono",ui-monospace,Menlo,monospace;background:#0f1726;color:#cfd8e6;border-radius:10px;padding:8px 0;overflow-x:auto}
+pre .ln{display:block;padding:0 10px;border-left:3px solid transparent;opacity:.55;transition:all .3s;white-space:pre}
+pre .ln.hl{opacity:1;background:rgba(245,196,81,.14);border-left-color:#f5c451}
+pre .n{color:#5d6b80;margin-right:8px}
+pre .c{color:#6f7d92}
+.list{margin:0;padding-left:18px;font-size:13px;color:#3b4554}
+.list li{margin:2px 0;cursor:pointer}
+.list li.on{color:var(--drop);font-weight:700}
+.note{font-size:12px;color:var(--mute)}
+@media (max-width:1180px){.app{grid-template-columns:200px minmax(0,1fr)}aside{grid-column:2;padding:0 clamp(12px,2vw,24px) 16px}}
+@media (max-width:760px){.app{grid-template-columns:1fr}nav{display:flex;overflow-x:auto;min-height:0;border-right:0;border-bottom:1px solid var(--line)}nav button{flex:none;width:auto;min-width:130px}aside{grid-column:1;padding:0 12px 16px}.stage .ttl b{font-size:24px}.sub{font-size:15px}}
+
+.talk{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:end;padding:10px 18px 14px}
+.haru{width:136px;height:136px;border-radius:12px;background:#d4d4d6;display:block;transition:transform .12s;border:2px solid #2a1f3d}
+.bubble{position:relative;background:#fff;color:#18202c;border-radius:14px;padding:12px 16px 12px;min-height:84px;font-size:17px;line-height:1.55;border:2px solid #2a1f3d;box-shadow:3px 3px 0 #2a1f3d}
+.bubble:before{content:"";position:absolute;left:-12px;bottom:22px;border:10px solid transparent;border-right-color:#2a1f3d;border-left:0}
+.bubble:after{content:"";position:absolute;left:-8px;bottom:24px;border:8px solid transparent;border-right-color:#fff;border-left:0}
+.bubble .who{display:block;font:800 12px system-ui;color:#957cc9;margin-bottom:2px}
+.bubble .caret{display:inline-block;width:8px;height:15px;background:#957cc9;margin-left:2px;vertical-align:-2px;animation:bl 1s steps(2) infinite}
+@keyframes bl{50%{opacity:0}}
+@media (max-width:760px){.haru{width:96px;height:96px}.bubble{font-size:15px;min-height:70px}}
+@media (prefers-reduced-motion:reduce){.bubble .caret{animation:none}}
+.fig .alt{position:static;width:auto;height:auto;clip:auto;margin:4px 6px 0;font-size:12px;color:var(--smute);text-align:center}
+code{font:12px ui-monospace,Menlo,monospace}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:center}
+.hero img{width:100%;height:auto;aspect-ratio:16/9;border-radius:12px;border:1px solid var(--line);display:block}
+.parts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.parts a,.parts span{font-size:13px;border:1px solid var(--line);border-radius:99px;padding:6px 12px;text-decoration:none;color:var(--ink);min-height:32px;display:inline-flex;align-items:center}
+.parts .on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.parts .soon{color:var(--mute);border-style:dashed}
+@media (max-width:900px){.hero{grid-template-columns:1fr}.hero img{max-width:520px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="hero"><div>
+  <div style="font:700 12px ui-monospace,Menlo,monospace;letter-spacing:.1em;color:#957cc9">AHNBOAT LAB · 조수 하루의 3차원 실험실 · EP.04 · 실험대 (5, 0, 5) · <a href="https://adminmrobo.github.io/ahn_boat_lab_town/haru3d.html" style="color:inherit">랩타운 2층 실험실로 ↗</a></div>
+  <h1>하루의 실험실 : 시아와 모아는 얼마나 멀까 — 1부 공간 속 거리</h1>
+  <p>자를 바꾸면 답이 바뀝니다. 좌표 방 안의 위치, 피규어 후기, 사는 도시를 여섯 가지 자로 잰 숫자를 조수 하루가 말풍선으로 설명합니다. ▶ 재생을 누르면 대사가 읽는 속도에 맞춰 넘어가고, 무대를 누르면 다음 대사로 갑니다.</p>
+  <div class="kpis">
+    <div class="kpi"><b style="color:#d9961a">9.899</b><span>유클리드 · 시아 ↔ 모아 직선</span></div>
+    <div class="kpi"><b style="color:var(--drop)">0.990</b><span>코사인 · 두 사람의 후기</span></div>
+    <div class="kpi"><b style="color:var(--plain)">8,857 km</b><span>하버사인 · 서울 ↔ 런던</span></div>
+    <div class="kpi"><b>8 ≤ 9.899 ≤ 16</b><span>체비쇼프 ≤ 유클리드 ≤ 맨해튼</span></div>
+  </div>
+  <div class="parts"><span class="on">1부 · 공간 속 거리</span><span class="soon">2부 · 같은 것인가 (해밍·자카드·다이스) — 준비 중</span></div>
+  </div><img src="images/cover_part1.webp" alt="좌표 방에서 시아와 모아 사이를 직선·꺾인 길·한 축으로 잇고, 하루가 줄자를 든 픽셀아트 표지" width="960" height="540"></div>
+</header>
+<div class="app">
+  <nav id="nav"></nav>
+  <div class="center">
+    <div class="stage" id="stage">
+      <div class="ttl"><div class="kick">조수 하루의 3차원 실험실 · EP.04 · 1부</div><b>공간 속 거리</b><span>같은 두 사람, 여섯 가지 자</span></div>
+      <div class="fig"><canvas id="cv" role="img" aria-label="실험 장면"></canvas><p class="alt" id="alt"></p></div>
+      <div class="talk"><img class="haru" id="haru" alt="조수 하루" width="136" height="136"><div class="bubble"><span class="who">조수 하루</span><span id="cur"></span><span class="caret" id="caret"></span></div></div>
+      <div class="dots" id="dots"></div>
+    </div>
+    <div class="ctrl">
+      <button class="main" id="play">▶ 재생</button>
+      <button id="prevp" aria-label="이전 파트">◀ 이전</button>
+      <button id="nextp" aria-label="다음 파트">다음 ▶</button>
+      <select id="spd" aria-label="읽기 속도"><option value="0.75">읽기: 천천히</option><option value="1" selected>읽기: 보통</option><option value="1.35">읽기: 빠르게</option></select>
+      <select id="theme" aria-label="무대 색"><option value="dark">무대: 어둡게</option><option value="light">무대: 밝게</option></select>
+      <label><input type="checkbox" id="auto" checked> 끝나면 다음 파트</label>
+    </div>
+  </div>
+  <aside>
+    <div class="card"><h3>distance_reel.py — 지금 설명하는 줄</h3><pre id="code"></pre></div>
+    <div class="card"><h3 id="ltitle">이 파트의 대사</h3><ol class="list" id="lines"></ol></div>
+    <div class="card note">하루·시아·모아 그림: 캐릭터 팩 <a href="https://adminmrobo.github.io/fruitfly-lab-expressions/">fruitfly-lab-expressions</a>. 모든 숫자는 <code>tools/experiment.py</code>(시드 4)를 실행한 결과입니다(유클리드 9.899 · 맨해튼 16 · 체비쇼프 8 · 민코프스키 p=3 8.724 · 코사인 0.990 · 하버사인 8,857 km). 민코프스키 곡선과 거리가 1인 면, 지구본 위 호는 같은 숫자로 페이지 안에서 직접 계산합니다. 후기는 하루 연구실 가상 상품의 예시 후기입니다.</div>
+  </aside>
+</div>
+<footer style="border-top:1px solid var(--line);padding:16px max(3vw,16px);font-size:12px;color:var(--mute)">
+  원작 아이디어: 거리 척도 9가지를 한 장에 모은 인포그래픽 'Distance metrics'(@mathemetica 표기). 원본 그림과 숫자는 쓰지 않았고, 시아·모아의 좌표·후기·도시를 새로 정해 다시 계산했습니다.
+  · 하버사인은 지구를 반지름 6,371 km의 공으로 보고 계산합니다.
+  · <a href="https://www.ahnboat.xyz/">AHNBOAT LAB</a> · 그림: <a href="https://adminmrobo.github.io/fruitfly-lab-expressions/">캐릭터 팩</a>
+  · Reon Ahn's Page © 2022 Reon Ahn · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ko">CC BY-NC 4.0</a>
+</footer>
+<script>
+{
+const D=__DATA__, P=__SCRIPT__;
+const $=s=>document.querySelector(s), cv=$("#cv");
+const CODE=[["import numpy as np",""],
+["sia, moa = np.array([4, 0, 10]), np.array([12, 5, 7])","# 방 안 좌표"],
+["d = moa - sia","# (8, 5, -3)"],
+["euclid = np.sqrt((d ** 2).sum())","# 9.899"],
+["manhattan = np.abs(d).sum()","# 16"],
+["chebyshev = np.abs(d).max()","# 8"],
+["minkowski = lambda p: (np.abs(d) ** p).sum() ** (1 / p)","# p=3 → 8.724"],
+["a, b = count(sia_review), count(moa_review)","# (2,1,0) (6,2,0)"],
+["cos = a @ b / (norm(a) * norm(b))","# 0.990"],
+["p1, l1, p2, l2 = np.radians([*seoul, *london])",""],
+["h = sin((p2-p1)/2)**2 + cos(p1)*cos(p2)*sin((l2-l1)/2)**2",""],
+["km = 2 * 6371 * np.arcsin(np.sqrt(h))","# 8,857"]];
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+$("#code").innerHTML=CODE.map((l,i)=>`<span class="ln" id="L${i+1}"><span class="n">${String(i+1).padStart(2," ")}</span>${esc(l[0])}  <span class="c">${esc(l[1])}</span></span>`).join("");
+const CODE_BY={7:[[1],[3,4,5,6],[8,9],[10,11,12]],8:[[4,5,6,7],[4,5,6],[9,12]]};
+
+/* ---------- theme ---------- */
+const TH={dark:{bg:"#0b111c",panel:"#0f1828",border:"#22304a",ink:"#e8eef7",mute:"#8b97a8",grid:"#1a2639",plain:"#ff6a4d",drop:"#4fb4ff",sum:"#f5c451",off:"#3b475b",dash:"#8692a6",vio:"#b48cff",cyan:"#5fd8f0",glow:1,X:"#ff6a4d",Y:"#3cc48c",Z:"#4fb4ff"},
+          light:{bg:"#ffffff",panel:"#f6f8fb",border:"#dce3ec",ink:"#18202c",mute:"#6b7686",grid:"#e8edf4",plain:"#e4572e",drop:"#1f8fd6",sum:"#d9961a",off:"#c3cbd7",dash:"#9aa4b2",vio:"#7b4fb3",cyan:"#1a9fc0",glow:0,X:"#e4572e",Y:"#2a9d6f",Z:"#1f8fd6"}};
+let C=TH.dark;
+function applyTheme(k){C=TH[k];const s=$("#stage").style;s.setProperty("--sbg",C.bg);s.setProperty("--sink",C.ink);s.setProperty("--smute",C.mute);s.setProperty("--sgrid",C.grid)}
+applyTheme("dark");$("#theme").onchange=e=>applyTheme(e.target.value);
+const REDUCE=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const HARU=__HARU__;
+
+/* ---------- drawing primitives ---------- */
+let c,W,H;
+function rr(x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
+function panel(x,y,w,h){rr(x,y,w,h,10);c.fillStyle=C.panel;c.fill();c.strokeStyle=C.border;c.lineWidth=1;c.stroke()}
+function txt(s,x,y,o={}){c.font=`${o.w||600} ${o.s||12}px ${o.mono?"ui-monospace,Menlo,monospace":"'Pretendard','Noto Sans KR',system-ui,sans-serif"}`;c.fillStyle=o.col||C.ink;c.textAlign=o.a||"left";c.globalAlpha=o.al??1;c.fillText(s,x,y);c.globalAlpha=1;c.textAlign="left"}
+function badge(s,x,y,o={}){c.font=`700 ${o.s||12}px 'Pretendard','Noto Sans KR',system-ui`;const w=c.measureText(s).width+28,h=(o.s||12)+14;c.globalAlpha=o.al??1;rr(x-w/2,y-h/2,w,h,6);c.fillStyle=C.panel;c.fill();c.strokeStyle=o.col||C.ink;c.lineWidth=1.4;c.stroke();c.fillStyle=o.col||C.ink;c.textAlign="center";c.fillText(s,x,y+(o.s||12)/2-2);c.textAlign="left";c.globalAlpha=1}
+const ease=t=>t<0?0:t>1?1:t*t*(3-2*t);
+const hex=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+function mix(a,b,t){const A=hex(a),B=hex(b);t=Math.max(0,Math.min(1,t));return`rgb(${A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(",")})`}
+const gray=v=>{v=Math.round(Math.max(0,Math.min(255,v)));return`rgb(${v},${v},${v})`};
+/* 16x16 그림 (0~255): 회색 그대로 */
+function pix(img,x,y,s,o={}){const n=img.length;for(let r=0;r<n;r++)for(let q=0;q<n;q++){c.fillStyle=gray(img[r][q]);c.fillRect(x+q*s,y+r*s,s,s)}
+  c.strokeStyle=C.border;c.lineWidth=.6;c.globalAlpha=.8;for(let i=0;i<=n;i++){c.beginPath();c.moveTo(x+i*s,y);c.lineTo(x+i*s,y+n*s);c.moveTo(x,y+i*s);c.lineTo(x+n*s,y+i*s);c.stroke()}c.globalAlpha=1;
+  if(o.nums&&s>=17)for(let r=0;r<n;r++)for(let q=0;q<n;q++){const v=Math.round(img[r][q]);txt(String(v),x+q*s+s/2,y+r*s+s/2+3.2,{a:"center",s:Math.min(10,s*.36),mono:1,w:500,col:v>140?"#111":"#9aa6b8",al:o.nal??1})}}
+/* 특징 지도: 0 → 판 색, 최대 → col */
+function fmap(m,x,y,s,col,mx,o={}){const n=m.length;mx=mx||Math.max(1e-6,...m.flat());for(let r=0;r<n;r++)for(let q=0;q<n;q++){c.fillStyle=mix(C.bg,col,m[r][q]/mx);c.fillRect(x+q*s,y+r*s,s+.3,s+.3)}
+  c.strokeStyle=o.frame||C.border;c.lineWidth=o.frame?2:1;c.strokeRect(x,y,n*s,n*s)}
+/* 3x3 필터: + 파랑, − 빨강 */
+function kern(k,x,y,s,o={}){const mx=o.mx||Math.max(...k.map(Math.abs));for(let i=0;i<9;i++){const v=k[i],r=Math.floor(i/3),q=i%3;c.fillStyle=mix(C.panel,v>=0?C.drop:C.plain,Math.abs(v)/mx);c.fillRect(x+q*s,y+r*s,s,s);
+   if(o.nums)txt(v.toFixed(2),x+q*s+s/2,y+r*s+s/2+3.5,{a:"center",s:Math.min(11,s*.3),mono:1,w:600})}
+  c.strokeStyle=o.frame||C.border;c.lineWidth=o.frame?2:1;c.strokeRect(x,y,3*s,3*s)}
+function bars(x,y,w,ps,o={}){const rowH=o.rowH||22;ps.forEach((p,j)=>{const yy=y+j*rowH,lw=o.lw||46;txt(KO[j],x,yy+12,{s:12,w:700,col:j===o.hl?C.ink:C.mute});rr(x+lw,yy+3,w-lw-56,10,5);c.fillStyle=C.grid;c.fill();
+   if(p>0.001){rr(x+lw,yy+3,Math.max(10,(w-lw-56)*p),10,5);c.fillStyle=o.col||C.drop;c.globalAlpha=j===o.hl?1:.55;c.fill();c.globalAlpha=1}txt(pct(p),x+w,yy+13,{a:"right",s:12,mono:1,w:700,col:j===o.hl?(o.col||C.drop):C.mute})})}
+function chart(x,y,w,h,o={}){panel(x,y,w,h);const pl=o.pl??38,pb=o.pb??22,pt=o.pt??(o.title?26:10),pr=10;const bx=x+pl,by=y+pt,bw=w-pl-pr,bh=h-pt-pb,xr=o.xr,yr=o.yr;
+  const m={X:v=>bx+(v-xr[0])/(xr[1]-xr[0])*bw,Y:v=>by+bh-(v-yr[0])/(yr[1]-yr[0])*bh,bx,by,bw,bh};c.lineWidth=1;
+  o.yt.forEach(t=>{const Y=m.Y(t);c.strokeStyle=C.grid;c.beginPath();c.moveTo(bx,Y);c.lineTo(bx+bw,Y);c.stroke();txt(o.yf?o.yf(t):String(t),bx-5,Y+3.5,{a:"right",col:C.mute,s:10,mono:1,w:400})});
+  o.xt.forEach(t=>{const X=m.X(t);c.strokeStyle=C.grid;c.beginPath();c.moveTo(X,by);c.lineTo(X,by+bh);c.stroke();txt(o.xf?o.xf(t):String(t),X,by+bh+14,{a:"center",col:C.mute,s:10,mono:1,w:400})});
+  if(o.title)txt(o.title,x+10,y+17,{col:o.tcol||C.ink,s:12,w:800});return m}
+function pline(m,xs,ys,col,lw=2,o={}){c.save();if(o.dash)c.setLineDash([5,4]);c.strokeStyle=col;c.lineWidth=lw;c.globalAlpha=o.al??1;c.beginPath();xs.forEach((x,i)=>{i?c.lineTo(m.X(x),m.Y(ys[i])):c.moveTo(m.X(x),m.Y(ys[i]))});c.stroke();
+  if(o.dots)xs.forEach((x,i)=>{c.beginPath();c.arc(m.X(x),m.Y(ys[i]),3.5,0,7);c.fillStyle=col;c.fill()});c.restore()}
+
+/* ---------- 3D: 좌표 공간에 쌓은 지도 (x 오른쪽, y 위, z 앞 — 오른손 좌표계) ---------- */
+function cam3(cx,cy,S,T,o={}){const yaw=(o.yaw??.72)+(REDUCE?0:.22*Math.sin(T*.3)),pit=o.pit??.5,cy_=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pit),sp=Math.sin(pit),ce=o.center||[8,8,8],Dd=o.dist||60;
+  return(x,y,z)=>{x-=ce[0];y-=ce[1];z-=ce[2];const X=x*cy_-z*sy,Z0=x*sy+z*cy_,Y=y*cp+Z0*sp,Z=-y*sp+Z0*cp;const f=Dd/(Dd-Z);return[cx+X*S*f,cy-Y*S*f,Z]}}
+function axes3(pr,len,o={}){c.lineWidth=1;for(let i=0;i<=len;i++){const maj=i%2===0;c.strokeStyle=C.grid;c.globalAlpha=maj?.9:.45;
+    let a=pr(i,0,0),b=pr(i,0,len);c.beginPath();c.moveTo(a[0],a[1]);c.lineTo(b[0],b[1]);c.stroke();a=pr(0,0,i);b=pr(len,0,i);c.beginPath();c.moveTo(a[0],a[1]);c.lineTo(b[0],b[1]);c.stroke()}c.globalAlpha=1;
+  [["x",[len+2,0,0],C.X],["y",[0,len+2,0],C.Y],["z",[0,0,len+2],C.Z]].forEach(([n,e,col],k)=>{const o0=pr(0,0,0),p=pr(...e);c.strokeStyle=col;c.lineWidth=2.4;c.beginPath();c.moveTo(o0[0],o0[1]);c.lineTo(p[0],p[1]);c.stroke();
+    const q=pr(...e.map(v=>v?v-.9:0)),ang=Math.atan2(p[1]-q[1],p[0]-q[0]);c.fillStyle=col;c.beginPath();c.moveTo(p[0],p[1]);c.lineTo(p[0]-9*Math.cos(ang-.4),p[1]-9*Math.sin(ang-.4));c.lineTo(p[0]-9*Math.cos(ang+.4),p[1]-9*Math.sin(ang+.4));c.fill();
+    txt(n,p[0]+10*Math.cos(ang),p[1]+10*Math.sin(ang)+4,{a:"center",s:15,w:800,col});
+    for(let t=2;t<=len;t+=2){const v=[0,0,0];v[k]=t;const L=pr(...v);txt(String(t),L[0]+(k===1?-10:0),L[1]+(k===1?4:14),{a:"center",s:9,mono:1,w:600,col,al:.9})}});
+  const o0=pr(0,0,0);txt("(0, 0, 0)",o0[0]-6,o0[1]+16,{a:"right",s:10,mono:1,w:600,col:C.mute})}
+
+__SCENES__
+
+/* ---------- 하루: 캐릭터 팩 fruitfly-lab-expressions ---------- */
+const himg=$("#haru");let curEx="";
+function drawHaru(ex,bob){if(ex!==curEx){himg.src=HARU[ex]||HARU.neutral;curEx=ex}himg.style.transform=bob&&!REDUCE?"translateY(-3px)":"none"}
+const EXP=__EXP__;
+/* 3D가 그려지지 않는 환경을 위한 한 줄 글 */
+const ALT=["좌표 방의 시아 (4, 0, 10)와 공중 발판의 모아 (12, 5, 7). 자에 따라 거리가 9.899, 16, 8, 8.724, 코사인 0.990, 8,857 km로 달라집니다.","차이 Δ = (8, 5, −3). 제곱해 더한 98의 제곱근, 유클리드 거리 9.899.","축을 따라 꺾어 걸으면 8 + 5 + 3 = 16(맨해튼), 가장 큰 축 하나만 보면 8(체비쇼프).","민코프스키 거리: p = 1이면 16, p = 2면 9.899, p = 3이면 8.724, p = 8이면 8.023. 거리가 1인 면은 정팔면체 → 공 → 정육면체.","후기 벡터(표정, 도색, 배송): 시아 (2, 1, 0), 모아 (6, 2, 0). 끝과 끝 4.123, 각도 8.1°, 코사인 0.990.","후기 여섯 개가 표정(시아·모아), 도색(초파리·박사), 배송(주판봇·X1) 세 묶음으로 모입니다.","서울–런던: 지구 표면을 따라 8,857 km, 지구 속 직선 8,161 km.","거리 여섯 가지의 계산식: 제곱합의 제곱근, 절댓값 합, 최댓값, p제곱합의 1/p제곱, 내적/길이 곱, 하버사인.","위치 8 · 8.724 · 9.899 · 16, 후기 코사인 0.990, 서울–런던 8,857 km.","자가 답을 정합니다. 코사인은 글 길이를, 하버사인은 지구의 납작함을 버립니다. 2부는 같은 것인가."];
+
+/* ---------- player (no audio: lines advance by reading time) ---------- */
+let started=false,part=0,si=0,f=0,playing=false,t0=performance.now(),lineStart=performance.now(),pausedAt=0,speed=1;
+const durOf=(p,i)=>(1.6+P[p].lines[i][0].length*.11)/speed;
+const partDur=p=>P[p].lines.reduce((a,_,i)=>a+durOf(p,i)+.6/speed,0);
+const nav=$("#nav");P.forEach((p,i)=>{const b=document.createElement("button");b.innerHTML=`${i+1}. ${p.t}<small>${P[i].lines.length}마디</small><div class="bar"><i id="pb${i}"></i></div>`;b.onclick=()=>{go(i);if(!playing)togglePlay()};nav.appendChild(b)});
+function renderSide(){$("#lines").innerHTML=P[part].lines.map((l,i)=>`<li data-i="${i}" class="${i===si?"on":""}">${esc(l[0])}</li>`).join("");$("#ltitle").textContent=`파트 ${part+1} 대사 — ${P[part].t}`;
+  $("#dots").innerHTML=P[part].lines.map((_,i)=>`<button data-i="${i}" class="${i===si?"on":""}" aria-label="대사 ${i+1}">${i+1}</button>`).join("");
+  const hl=(CODE_BY[part]&&CODE_BY[part][si])||P[part].code;for(let i=1;i<=CODE.length;i++)$("#L"+i).classList.toggle("hl",hl.includes(i));
+  [...nav.children].forEach((b,j)=>b.classList.toggle("on",j===part))}
+function setLine(i){si=i;f=0;lineStart=performance.now();renderSide();$("#alt").textContent=ALT[part]}
+function go(i,s=0){part=i;t0=performance.now();setLine(s)}
+function togglePlay(){playing=!playing;started=true;$("#play").textContent=playing?"❚❚ 일시정지":"▶ 재생";if(playing)lineStart=performance.now()-f*durOf(part,si)*1000}
+$("#play").onclick=togglePlay;$("#prevp").onclick=()=>go(Math.max(0,part-1));$("#nextp").onclick=()=>go(Math.min(P.length-1,part+1));
+$("#dots").onclick=e=>{const b=e.target.closest("button");if(b)setLine(+b.dataset.i)};$("#lines").onclick=e=>{const l=e.target.closest("li");if(l)setLine(+l.dataset.i)};
+$("#spd").onchange=e=>{const k=f;speed=+e.target.value;lineStart=performance.now()-k*durOf(part,si)*1000};
+$("#stage").addEventListener("click",e=>{if(e.target.closest("button"))return;if(!playing)togglePlay();else advance()});
+function advance(){if(si+1<P[part].lines.length)setLine(si+1);else if($("#auto").checked&&part<P.length-1)go(part+1);else{f=1;if(playing)togglePlay()}}
+document.addEventListener("keydown",e=>{if(e.target.tagName==="SELECT")return;if(e.key===" "){e.preventDefault();togglePlay()}if(e.key==="ArrowRight")advance();if(e.key==="ArrowLeft")si>0?setLine(si-1):go(Math.max(0,part-1))});
+
+let dpr=1;function size(){dpr=devicePixelRatio||1;const w=cv.parentElement.clientWidth;W=w;H=Math.max(300,Math.min(540,Math.round(w*.62)));cv.width=W*dpr;cv.height=H*dpr;cv.style.height=H+"px"}
+new ResizeObserver(size).observe(cv.parentElement);size();
+let lastTxt="";
+function loop(){const now=performance.now(),T=(now-t0)/1000,el=(now-lineStart)/1000,d=durOf(part,si);
+  if(playing){f=Math.min(1,el/d);if(el>d+.6/speed)advance()}else if(!started||el<d){f=Math.max(f,Math.min(1,el/d))}
+  const line=P[part].lines[si][0],nch=Math.min(line.length,Math.floor(el*22*speed)+1),typing=nch<line.length;
+  const shown=line.slice(0,nch);if(shown!==lastTxt){$("#cur").textContent=shown;lastTxt=shown}$("#caret").style.visibility=typing?"visible":"hidden";
+  const ex=(EXP[part]&&EXP[part][si])||"neutral";drawHaru(ex,typing&&Math.floor(now/160)%2===0);
+  c=cv.getContext("2d");c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,W,H);
+  try{S[part](si,f,T)}catch(e){console.error(e)}
+  const pos=(P[part].lines.slice(0,si).reduce((a,_,i)=>a+durOf(part,i),0)+f*d)/partDur(part);
+  for(let i=0;i<P.length;i++)$("#pb"+i).style.width=(i<part?100:i===part?Math.min(100,pos*100):0)+"%";
+  requestAnimationFrame(loop)}
+go(0);requestAnimationFrame(loop);
+}
+</script>
+</body>
+</html>
