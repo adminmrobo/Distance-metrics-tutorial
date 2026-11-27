@@ -212,19 +212,21 @@ __COMIC__
 let started=false,part=0,si=0,f=0,playing=false,t0=performance.now(),lineStart=performance.now(),pausedAt=0,speed=1;
 const durOf=(p,i)=>(1.6+P[p].lines[i][0].length*.11)/speed;
 const partDur=p=>P[p].lines.reduce((a,_,i)=>a+durOf(p,i)+.6/speed,0);
-const nav=$("#nav");P.forEach((p,i)=>{const b=document.createElement("button");b.innerHTML=`${i}. ${p.t}<small>${P[i].lines.length}마디</small><div class="bar"><i id="pb${i}"></i></div>`;b.onclick=()=>{go(i);if(!playing)togglePlay()};nav.appendChild(b)});
+const nav=$("#nav");P.forEach((p,i)=>{const b=document.createElement("button");b.innerHTML=`${i}. ${p.t}<small>${P[i].lines.length}마디</small><div class="bar"><i id="pb${i}"></i></div>`;b.onclick=()=>{ended=false;go(i);playOn()};nav.appendChild(b)});
 function renderSide(){$("#lines").innerHTML=P[part].lines.map((l,i)=>`<li data-i="${i}" class="${i===si?"on":""}">${esc(l[0])}</li>`).join("");$("#ltitle").textContent=`파트 ${part} 대사 — ${P[part].t}`;
   $("#dots").innerHTML=P[part].lines.map((_,i)=>`<button data-i="${i}" class="${i===si?"on":""}" aria-label="대사 ${i+1}">${i+1}</button>`).join("");
   const hl=(CODE_BY[part]&&CODE_BY[part][si])||P[part].code;for(let i=1;i<=CODE.length;i++)$("#L"+i).classList.toggle("hl",hl.includes(i));
   [...nav.children].forEach((b,j)=>b.classList.toggle("on",j===part))}
 function setLine(i){si=i;f=0;lineStart=performance.now();renderSide();$("#alt").textContent=ALT[part]}
 function go(i,s=0){part=i;t0=performance.now();setLine(s)}
-function togglePlay(){playing=!playing;started=true;$("#play").textContent=playing?"❚❚ 일시정지":"▶ 재생";if(playing)lineStart=performance.now()-f*durOf(part,si)*1000}
-$("#play").onclick=togglePlay;$("#prevp").onclick=()=>go(Math.max(0,part-1));$("#nextp").onclick=()=>go(Math.min(P.length-1,part+1));
-$("#dots").onclick=e=>{const b=e.target.closest("button");if(b)setLine(+b.dataset.i)};$("#lines").onclick=e=>{const l=e.target.closest("li");if(l)setLine(+l.dataset.i)};
+let ended=false;
+function togglePlay(){if(ended){ended=false;go(0)}playing=!playing;started=true;$("#play").textContent=playing?"❚❚ 일시정지":"▶ 재생";if(playing)lineStart=performance.now()-f*durOf(part,si)*1000}
+const playOn=()=>{if(!playing)togglePlay()};
+$("#play").onclick=togglePlay;$("#prevp").onclick=()=>{ended=false;go(Math.max(0,part-1));playOn()};$("#nextp").onclick=()=>{ended=false;go(Math.min(P.length-1,part+1));playOn()};
+$("#dots").onclick=e=>{const b=e.target.closest("button");if(b){ended=false;setLine(+b.dataset.i);playOn()}};$("#lines").onclick=e=>{const l=e.target.closest("li");if(l){ended=false;setLine(+l.dataset.i);playOn()}};
 $("#spd").onchange=e=>{const k=f;speed=+e.target.value;lineStart=performance.now()-k*durOf(part,si)*1000};
 $("#stage").addEventListener("click",e=>{if(e.target.closest("button"))return;if(!playing)togglePlay();else advance()});
-function advance(){if(si+1<P[part].lines.length)setLine(si+1);else if($("#auto").checked&&part<P.length-1)go(part+1);else{f=1;if(playing)togglePlay()}}
+function advance(){if(si+1<P[part].lines.length)setLine(si+1);else if($("#auto").checked&&part<P.length-1)go(part+1);else{f=1;if(playing)togglePlay();if(part===P.length-1){ended=true;$("#play").textContent="↺ 처음부터"}}}
 document.addEventListener("keydown",e=>{if(e.target.tagName==="SELECT")return;if(e.key===" "){e.preventDefault();togglePlay()}if(e.key==="ArrowRight")advance();if(e.key==="ArrowLeft")si>0?setLine(si-1):go(Math.max(0,part-1))});
 
 let dpr=1;function size(){dpr=devicePixelRatio||1;const w=cv.parentElement.clientWidth;W=w;H=Math.max(300,Math.min(540,Math.round(w*.62)));cv.width=W*dpr;cv.height=H*dpr;cv.style.height=H+"px"}
